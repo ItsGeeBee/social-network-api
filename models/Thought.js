@@ -1,7 +1,9 @@
 const { Schema, model, Types } = require('mongoose');
 const moment = require('moment');
 
+// Create a new instance of the Mongoose schema to define shape of each document
 const ReactionSchema = new Schema({
+    // Add individual properties and their types
     reactionId: {
         type: Schema.Types.ObjectId,
         default: () => new Types.ObjectId()
@@ -30,6 +32,7 @@ const ReactionSchema = new Schema({
     }
 );
 
+// Create a new instance of the Mongoose schema to define shape of each document
 const ThoughtSchema = new Schema({
     thoughtText: {
         type: String,
@@ -57,12 +60,12 @@ const ThoughtSchema = new Schema({
         id: false
     }
 );
-
+// Create a virtual property `reactionCount` that gets the amount of reactions per post
 ThoughtSchema.virtual('reactionCount').get(function () {
     return this.reactions.length;
 });
 
-
+// Initialize the Thought model
 const Thought = model('Thought', ThoughtSchema);
 
 
