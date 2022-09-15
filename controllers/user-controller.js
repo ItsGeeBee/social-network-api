@@ -1,6 +1,6 @@
 const { User, Thought } = require('../models');
 
-const userController = {
+module.exports = {
   getAllUser(req, res) {
     User.find({})
       .select('-__v')
@@ -68,6 +68,3 @@ const userController = {
       })
       .catch((err) => res.status(400).json(err));
   }};
-
-  
-  module.exports = userController
