@@ -8,7 +8,7 @@ module.exports = {
 },
 
   // get one thoughts by id
-  getThoughtById(res, res) {
+  getThoughtById(req, res) {
     Thought.findOne({ _id: req.params.id })
     .populate({ path: "reactions", select: "-__v" })
     .then((thought) =>
@@ -21,10 +21,10 @@ module.exports = {
 
   createThought({ body }, res) {
     Thought.create(body)
-        .then(({ _id }) => {
+        .then(({response}) => {
             return User.findOneAndUpdate(
                 { _id: body.userId },
-                { $push: { thoughts: _id } },
+                { $push: { thoughts: response._id } },
                 { new: true }
             );
         })
@@ -55,6 +55,20 @@ module.exports = {
       .catch(err => res.json(err));
   },
 
+  deleteThought(req, res) {
+    Thought.findOneAndDelete({ _id: req.params.thoughtId })
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thought with that ID' })
+          : User.deleteMany({ _id: { $in: thought.reaction } })
+      )
+      .then(() => res.json({ message: 'Thought and any related reactions are now deleted' }))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err)
+      });
+  },
+
   addReaction(req, res) {
     Thought.findOneAndUpdate(
     { _id: req.params.Id },
@@ -72,7 +86,6 @@ module.exports = {
       });
 },
 
-  
   deleteReaction(req, res) {
     Thought.findOneAndUpdate(
     { _id: req.params.Id },
