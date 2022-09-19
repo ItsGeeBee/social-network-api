@@ -1,6 +1,7 @@
 const { User, Thought} = require('../models');
 
 module.exports = {
+  // Get all thoughts 
   getAllThought(req, res) {
     Thought.find()
     .then((thoughts) => res.json(thoughts))
@@ -18,7 +19,7 @@ module.exports = {
     )
     .catch((err) => res.status(500).json(err));
 },
-
+// create a new thought 
   createThought({ body }, res) {
     Thought.create(body)
         .then(({response}) => {
@@ -38,7 +39,7 @@ module.exports = {
         .catch(err => res.json(err));
 },
 
-  // update Thought by id
+  // Update Thought by id
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate(
         { _id: params.id },
@@ -55,6 +56,7 @@ module.exports = {
       .catch(err => res.json(err));
   },
 
+  // Delete a thought by id
   deleteThought(req, res) {
     Thought.deleteOne({ _id: req.params.id })
       .then((thought) =>
@@ -65,6 +67,7 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
 
+  // Add reaction to an exisiting thought 
   addReaction(req, res) {
     Thought.findOneAndUpdate(
     { _id: req.params.Id },
@@ -81,6 +84,7 @@ module.exports = {
         res.status(500).json(err);
       });
 },
+
 
 addReaction({params, body}, res) {
   Thought.findOneAndUpdate(
@@ -99,6 +103,7 @@ addReaction({params, body}, res) {
   .catch(err => res.status(400).json(err))
 },
 
+// delete reaction
 deleteReaction(req, res) {
   Thought.findOneAndUpdate(
     { _id: req.params.thoughtId },

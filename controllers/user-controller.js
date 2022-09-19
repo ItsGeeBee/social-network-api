@@ -1,6 +1,7 @@
 const { User, Thought } = require('../models');
 
 module.exports = {
+// Get all users 
   getAllUser(req, res) {
     User.find({})
       .select('-__v')
@@ -11,7 +12,7 @@ module.exports = {
         res.sendStatus(400);
       });
   },
-
+// Get user my Id
   getUserById({ params }, res) {
     User.findOne({ _id: params.id })
       .populate({
@@ -34,6 +35,8 @@ module.exports = {
         res.sendStatus(400);
       });
   },
+
+  // Create new user
   createUser({ body }, res) {
     User.create(body)
       .then(dbUserData => res.json(dbUserData))
@@ -52,7 +55,7 @@ module.exports = {
       })
       .catch(err => res.json(err));
   },
-
+//Delete user 
   deleteUser({ params }, res) {
     Thought.deleteMany({ userId: params.id })
       .then(() => {
@@ -67,7 +70,7 @@ module.exports = {
       })
       .catch(err => res.json(err));
   },
-
+// Add a new friend
   addFriend({ params }, res) {
     User.findOneAndUpdate(
       { _id: params.userId },
@@ -84,6 +87,7 @@ module.exports = {
       .catch((err) => res.status(400).json(err));
   },
   
+// Remove friend 
   deleteFriend({ params }, res) {
     User.findOneAndUpdate(
       { _id: params.userId },
